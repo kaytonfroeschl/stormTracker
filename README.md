@@ -25,7 +25,7 @@ Click the `Generate` button on the page, and the program will run.
 
 ### WARNINGS!!!!
 
-1. I am calling BigDataCLoud API to precisley reverse geocode the latitude and longitude. This is a free service, however there are limits to how many calls I can make. Submitting this project I have about 40,000 calls left. Everytime you hit generate it uses 303.
+1. I am calling BigDataCLoud API to precisley reverse geocode the latitude and longitude. This is a free service, however there are limits to how many calls I can make. Submitting this project I have about 40,000 calls left. Everytime you hit generate it uses 1.9K.
 
 
-2. It is reccomended to run this program on any broswe but Chrome, (I used Safari). If you are using Chrome to run this program make sure you clear your cache first. 
+2. It is reccomended to run this program on anything but Chrome, (I used Safari). If you are using Chrome to run this program make sure you clear your cache first. 
