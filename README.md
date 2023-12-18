@@ -5,7 +5,7 @@ This project was built using: JavaScript, React, Axios, MUI, and Node.js
 ### Step 1
 Before you run the program, you must go to this link:
 
-`https://cors-anywhere.herokuapp.com/corsdemo`
+[https://cors-anywhere.herokuapp.com/corsdemo] (https://cors-anywhere.herokuapp.com/corsdemo)
 
 and click the button that says: `Request temporary access to the demo server`
 
