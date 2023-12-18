@@ -1,3 +1,9 @@
+/*
+    PARAMS: date, latitude, longitude, windspeed
+        - A row of data only gets a StormData object if I've already checked loosly if its near florida
+    StormData is then stored in an array called data in the StormClass
+*/
+
 
 export default class StormData {
     //assuming already close to flordia has been checked
