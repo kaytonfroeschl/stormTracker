@@ -26,7 +26,6 @@ function App() {
       //console.log(response.data);
       if(foo.countryCode === "US"){
         if(foo.principalSubdivision === "Florida"){
-          //console.log("this is a valid dataentry: ",foo)
           return(true)
         } else{
           return(false)
@@ -39,50 +38,43 @@ function App() {
     }
   }
 
-  async function flordiaCallBack(testingArray){
-    //console.log("Beginning array: ", testingArray);
-    for(let i = 0; i < testingArray.length; i++){
-      let newDataArray = [];
-      for(let j = 0; j < testingArray[i].data.length; j++){
-        const result = await locationAPI(testingArray[i].data[j].latitude, testingArray[i].data[j].longitude)
-        if(result){
-          //console.log("This point stays: ", testingArray[i].data[j])
-          newDataArray.push(testingArray[i].data[j]);
-          //newDataArray[i].data.push(dataArray[i].data[j]);
-        }
+  async function floridaCallBackTwo (storm){
+    let coordsInFlorida = await Promise.all(storm.data.map((coords) => locationAPI(coords.latitude, coords.longitude)));
+    //console.log("Flordia Callback TWO: ", coordsInFlorida)
+    coordsInFlorida = coordsInFlorida.map((item, index) => { 
+      if(item){ 
+        return storm.data[index];
+      } 
+    });
+
+    coordsInFlorida = coordsInFlorida.filter((item) => {
+      if(item !== undefined){
+        return item
       }
-      //console.log("New Data Array: ", newDataArray)
-      testingArray[i].data = newDataArray;
-      //console.log("New Results: ", testingArray);
-    }
-    
+    })
+
+    /*if (coordsInFlorida.length !== 0){
+      storm.data = coordsInFlorida;
+      
+    } else {
+      storm.data = [];
+    }*/
+    storm.data = coordsInFlorida;
+    return storm;
   }
 
- /*function isStormInFlorida(storm){
-    let newStormData = storm.data.filter( stormData => {
-       locationAPI(stormData.latitude, stormData.longitude).then((result) => {
-        console.log("Result: ", result)
-      })
-    })
-  }*/
-
-
-      /*let results = locationAPI(stormData.latitude, stormData.longitude);
-      console.log("Results: ", results)
-      if(results){
-        return true;
-      } else {
-        return false;
+  async function floridaCallBackOne(storms){
+    let stormsInFlorida = await Promise.all(storms.map((storm) => floridaCallBackTwo(storm)));
+    stormsInFlorida = stormsInFlorida.filter((item) => { if(item){ return item }});
+    //console.log("Florida callabck ONE ", stormsInFlorida)
+    
+    /*stormsInFlorida = stormsInFlorida.filter(item => {
+      if(item.data.length !== 0){
+        return item
       }
     })*/
-    /*console.log("Here is newStormData: ", newStormData)
-    storm.setData(newStormData);
-    if(storm.data.length !== 0){
-      return true;
-    } else {
-      return false;
-    }*/
-  
+    return stormsInFlorida;
+  }
   
   
  
@@ -201,10 +193,13 @@ function App() {
 
   function generate() {
     setGenerateDisable(true);
-    //let testingArray = [...dataArray.slice(0,15)];
+    let testingArray = [...dataArray.slice(0,220)];
     //console.log("Before callback array: ", testingArray);
-    flordiaCallBack(dataArray);
-    console.log("Results ", dataArray);
+    //flordiaCallBack(testingArray);
+    //floridaCallBackOne(dataArray);
+    floridaCallBackOne(testingArray);
+    console.log("Results ", testingArray);
+    //console.log("Results ", dataArray);
     //console.log("Line after callback")
     /*for(let i = 0; i < testingArray.length; i++){
       let answer = isStormInFlorida(dataArray[i])
@@ -242,17 +237,38 @@ export default App;
 
 /*
 
-  stormsInFlorida = dataArray.flatmap(storm => {
-    validPoints = storm.data.flatmap(stormData => {
-      return isPointInFlorida(stormData.latitude, stormData.longitude)
-    })
-    if(validPoints.length > 0){
-      storm.data = validPoints
-      return true
-    } else {
+  MainProcess {
+	
+	let stormsNearFlorida = checkStormsNearFlorida(data);
+	
+	const stormsInFlorida = CheckStormsActuallyInFlorida(stormsNearFlorida);
+	
+	//hopefully, all storms have been processed
+	//	and stormsInFlorida contains only storms in Florida
+	//	and stormData is only coords in Florida
+}
 
-    }
-  })
+async function CheckStormsActuallyInFlorida(storms) {
+		
+	let stormsInFlorida =  await Promise.all(storms.map((storm)=>AsyncIsStormActuallyInFlorida(storm)));
+	stormsInFlorida = stormsInFlorida.filter(Boolean);  //I don't get this?
+	
+	return stormsInFlorida;
+}
+
+async AsyncIsStormActuallyInFlorida(storm) {
+	
+	let coordsInFlorida =  await Promise.all(storm.stormData.map((coord)=>locationAPI(coord.lat, coord.long)));
+	coordsInFlorida = coordsInFlorida.filter(Boolean);  //I don't get this?	
+	
+	if coordsInFlorida.length != 0 then
+		storm.stormData = coordsInFlorida
+		return true
+	else
+		storm.stormdata = []
+		return false
+	end if
+}
 
 
 */
